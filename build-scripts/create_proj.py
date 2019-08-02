@@ -61,7 +61,7 @@ filename = ''
 
 
 def show_usage():
-    print('Usage: python create_prop.py app.json')
+    print('Usage: python create_proj.py app.json')
     sys.exit(0)
 
 
