@@ -53,12 +53,9 @@ AWTK_DIR = join_path(AWTK_ANDROID_DIR, '../awtk')
 BUILD_DIR = join_path(AWTK_ANDROID_DIR, 'build')
 TEMPLATE_DIR = join_path(AWTK_ANDROID_DIR, 'android-project')
 
+filename = ''
 print('AWTK_DIR:' + AWTK_DIR)
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
-
-
-filename = ''
-
 
 def show_usage():
     print('Usage: python create_proj.py app.json')
@@ -71,7 +68,7 @@ else:
     filename = os.path.abspath(sys.argv[1])
 
 def rename_files_content(app_root_dst, app_full_name, app_name):
-    files = ['AwtkTemplate.iml',
+    files = [
              'app/build.gradle',
              'app/src/main/AndroidManifest.xml',
              'app/src/main/res/values/strings.xml',
@@ -106,10 +103,6 @@ def rename_folders_and_files(app_root_dst, app_full_name):
     dst = join_path(app_root_dst, 'app/src/main/java/' + items[0])
     rename_item(src, dst)
 
-    src = join_path(app_root_dst, 'AwtkTemplate.iml')
-    dst = join_path(app_root_dst, items[2] + '.iml')
-    rename_item(src, dst)
-
 
 def copy_awtk_files(app_root_dst):
     awtk_src = join_path(AWTK_DIR, 'src')
@@ -123,7 +116,7 @@ def copy_awtk_files(app_root_dst):
 
 def copy_app_files(config, app_root_dst, app_root_src):
     assets_dir = config['assets'];
-    sources = config_get_android_sources(config);
+    sources = config_get_sources(config);
 
     for f in sources:
         sfrom = join_path(app_root_src, f)
@@ -136,7 +129,7 @@ def copy_app_files(config, app_root_dst, app_root_src):
     copy_folder(sfrom, sto);
 
 def config_get_app_full_name(config):
-    return config['android']['app_name']
+    return config['app_name']
 
 
 def config_get_app_name(config):
@@ -145,11 +138,14 @@ def config_get_app_name(config):
     return items[2]
 
 
-def config_get_android_sources(config):
-    return config['android']['sources']
+def config_get_sources(config):
+    return config['sources']
 
 
-def check_config(config):
+def merge_and_check_config(config):
+    for key in config['android']:
+        config[key] = config['android'][key]
+    
     app_full_name = config_get_app_full_name(config)
     items = app_full_name.split('.')
 
@@ -157,25 +153,38 @@ def check_config(config):
         print('invalid app name')
         sys.exit(0)
 
-    if len(config_get_android_sources(config)) < 1:
+    if len(config_get_sources(config)) < 1:
         print('no sources')
         sys.exit(0)
 
     return config
 
+def gen_local_props(app_root_dst):
+    ANDROID_HOME = os.environ.get('ANDROID_HOME');
+    ANDROID_NDK_HOME = os.environ.get('ANDROID_NDK_HOME');
+    filename = join_path(app_root_dst, 'local.properties');
+
+    if ANDROID_HOME != None and ANDROID_NDK_HOME != None:
+        content = 'sdk.dir=' + ANDROID_HOME + '\n';
+        content += 'ndk.dir=' + ANDROID_NDK_HOME + '\n';
+        file_write(filename, content);
+    else:
+        print('ANDROID_HOME or ANDROID_NDK_HOME is not set!')
 
 def create_project(config, app_root_src):
-    app_name = config_get_app_name(config)
-    app_full_name = config_get_app_full_name(config)
-    app_root_dst = join_path(BUILD_DIR, app_name)
+    app_name = config_get_app_name(config);
+    app_full_name = config_get_app_full_name(config);
+    app_root_dst = join_path(BUILD_DIR, app_name);
 
-    copy_folder(TEMPLATE_DIR, app_root_dst)
-    rename_files_content(app_root_dst, app_full_name, app_name)
-    rename_folders_and_files(app_root_dst, app_full_name)
+    copy_folder(TEMPLATE_DIR, app_root_dst);
+    rename_files_content(app_root_dst, app_full_name, app_name);
+    rename_folders_and_files(app_root_dst, app_full_name);
 
-    copy_awtk_files(app_root_dst)
-    copy_app_files(config, app_root_dst, app_root_src)
+    gen_local_props(app_root_dst);
+    copy_awtk_files(app_root_dst);
+    copy_app_files(config, app_root_dst, app_root_src);
 
 
 with open(filename, 'r') as load_f:
-    create_project(check_config(json.load(load_f)), os.path.dirname(filename))
+    config = merge_and_check_config(json.load(load_f))
+    create_project(config, os.path.dirname(filename))
