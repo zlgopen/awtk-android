@@ -16,6 +16,10 @@ public class MainActivity extends SDLActivity {
     }
 
     @Override
+    public void onSystemUiVisibilityChange(int visibility) {
+    }
+
+    @Override
     protected String[] getLibraries() {
         return new String[] {
                 "awtk",
