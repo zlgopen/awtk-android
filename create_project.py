@@ -46,14 +46,18 @@ def copy_file(src, dst):
             outfile.write(infile.read())
             outfile.write('\n')
 
-
-
-AWTK_ANDROID_DIR = join_path('./', '../')
+filename = ''
+ANDROID_HOME = os.environ.get('ANDROID_HOME');
+ANDROID_NDK_HOME = os.environ.get('ANDROID_NDK_HOME');
+AWTK_ANDROID_DIR = os.path.abspath(os.path.normpath(os.getcwd()));
 AWTK_DIR = join_path(AWTK_ANDROID_DIR, '../awtk')
 BUILD_DIR = join_path(AWTK_ANDROID_DIR, 'build')
 TEMPLATE_DIR = join_path(AWTK_ANDROID_DIR, 'android-project')
 
-filename = ''
+if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
+    print('ANDROID_HOME or ANDROID_NDK_HOME is not set!')
+    sys.exit(0)
+
 print('AWTK_DIR:' + AWTK_DIR)
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
 
@@ -160,16 +164,17 @@ def merge_and_check_config(config):
     return config
 
 def gen_local_props(app_root_dst):
-    ANDROID_HOME = os.environ.get('ANDROID_HOME');
-    ANDROID_NDK_HOME = os.environ.get('ANDROID_NDK_HOME');
     filename = join_path(app_root_dst, 'local.properties');
+    content = 'sdk.dir=' + ANDROID_HOME + '\n';
+    content += 'ndk.dir=' + ANDROID_NDK_HOME + '\n';
+    file_write(filename, content);
 
-    if ANDROID_HOME != None and ANDROID_NDK_HOME != None:
-        content = 'sdk.dir=' + ANDROID_HOME + '\n';
-        content += 'ndk.dir=' + ANDROID_NDK_HOME + '\n';
-        file_write(filename, content);
-    else:
-        print('ANDROID_HOME or ANDROID_NDK_HOME is not set!')
+def show_result(app_name):
+    print("====================================================");
+    print("project is created at: build/" + app_name);
+    print("to build: ");
+    print("  cd build/" + app_name + " && ./gradlew build");
+    print("====================================================");
 
 def create_project(config, app_root_src):
     app_name = config_get_app_name(config);
@@ -183,7 +188,7 @@ def create_project(config, app_root_src):
     gen_local_props(app_root_dst);
     copy_awtk_files(app_root_dst);
     copy_app_files(config, app_root_dst, app_root_src);
-
+    show_result(app_name);
 
 with open(filename, 'r') as load_f:
     config = merge_and_check_config(json.load(load_f))
