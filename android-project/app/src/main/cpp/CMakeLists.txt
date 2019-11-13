@@ -59,6 +59,7 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/blend/*.c
 	${AWTK_SOURCE_DIR}/src/clip_board/*.c
 	${AWTK_SOURCE_DIR}/src/font_loader/*.c
+    ${AWTK_SOURCE_DIR}/src/graphic_buffer/*.c
 	${AWTK_SOURCE_DIR}/src/ext_widgets/*.c
 	${AWTK_SOURCE_DIR}/src/ext_widgets/*/*.c
 	${AWTK_SOURCE_DIR}/src/image_loader/*.c
