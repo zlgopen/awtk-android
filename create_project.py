@@ -129,7 +129,7 @@ def copy_app_files(config, app_root_dst, app_root_src):
         copy_file(sfrom, sto)
 
     sfrom =  join_path(app_root_src, assets_dir + '/default/raw');
-    sto = join_path(app_root_dst, 'app/src/main/assets/assets/raw');
+    sto = join_path(app_root_dst, 'app/src/main/assets/assets/default/raw');
     copy_folder(sfrom, sto);
 
 def config_get_app_full_name(config):
