@@ -15,6 +15,8 @@ export PLATFORM_TOOLS_HOME=/Users/jim/Library/Android/sdk/platform-tools
 
 export PATH=$PATH:$NDK_HOME:$PLATFORM_TOOLS_HOME
 ```
+> 具体路径请根据平台调整。
+
 
 ## 下载 awtk 和 awtk-android 源码
 
