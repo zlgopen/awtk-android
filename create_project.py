@@ -139,6 +139,16 @@ def copy_app_files(config, app_root_dst, app_root_src):
     sto = join_path(app_root_dst, 'app/src/main/assets/assets/default/raw');
     copy_folder(sfrom, sto);
 
+
+def set_cmake_includes(config, app_root_dst):
+    includes = config_get_includes(config);
+    sincludes = '${APP_SOURCE_DIR}/src\n  ${APP_SOURCE_DIR}/3rd\n'
+    filename=join_path(app_root_dst, "app/src/main/cpp/CMakeLists.txt")
+    for f in includes:
+        sincludes += '  ${APP_SOURCE_DIR}/' + f + '\n';
+    print('process ' + filename)
+    file_replace(filename, 'EXTRA_INCLUDES', sincludes);
+
 def config_get_app_full_name(config):
     return config['app_name']
 
@@ -152,6 +162,11 @@ def config_get_app_name(config):
 def config_get_sources(config):
     return config['sources']
 
+def config_get_includes(config):
+    if 'includes' in config:
+        return config['includes']
+    else:
+        return []
 
 def merge_and_check_config(config):
     for key in config['android']:
@@ -195,6 +210,7 @@ def create_project(config, app_root_src):
     gen_local_props(app_root_dst);
     copy_awtk_files(app_root_dst);
     copy_app_files(config, app_root_dst, app_root_src);
+    set_cmake_includes(config, app_root_dst);
     show_result(app_name);
 
 with open(filename, 'r') as load_f:

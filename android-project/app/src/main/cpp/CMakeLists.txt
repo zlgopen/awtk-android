@@ -85,8 +85,7 @@ include_directories(${SDL2_SOURCE_DIR}/include
   ${AWTK_SOURCE_DIR}/3rd/nanovg/base
   ${AWTK_SOURCE_DIR}/3rd/libunibreak
   ${AWTK_SOURCE_DIR}/src/ext_widgets
-  ${APP_SOURCE_DIR}/3rd
-  ${APP_SOURCE_DIR}/src
+  EXTRA_INCLUDES
 )
 
 #set(CMAKE_C_FLAGS "-Os ")
