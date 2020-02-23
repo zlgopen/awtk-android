@@ -41,10 +41,14 @@ def copy_folder(src, dst):
 
 def copy_file(src, dst):
     print(src + '=>' + dst)
-    with open(dst, 'w') as outfile:
-        with open(src) as infile:
-            outfile.write(infile.read())
-            outfile.write('\n')
+    mkdir_if_not_exist(os.path.dirname(dst))
+    shutil.copy(src, dst)
+
+def copy_glob_files(src, srcdir, dstdir):
+    files = glob.glob(src)
+    for f in files:
+        dst = join_path(dstdir, f[len(srcdir)+1:]);
+        copy_file(f, dst)
 
 filename = ''
 ANDROID_HOME = os.environ.get('ANDROID_HOME');
@@ -124,9 +128,12 @@ def copy_app_files(config, app_root_dst, app_root_src):
 
     for f in sources:
         sfrom = join_path(app_root_src, f)
-        sto = join_path(join_path(app_root_dst, 'app/src/main/cpp/app'), f)
-        print(sfrom + '=>' + sto)
-        copy_file(sfrom, sto)
+        if sfrom.find("*") >= 0:
+            sto = join_path(app_root_dst, 'app/src/main/cpp/app')
+            copy_glob_files(sfrom, app_root_src, sto)
+        else:
+            sto = join_path(join_path(app_root_dst, 'app/src/main/cpp/app'), f)
+            copy_file(sfrom, sto)
 
     sfrom =  join_path(app_root_src, assets_dir + '/default/raw');
     sto = join_path(app_root_dst, 'app/src/main/assets/assets/default/raw');

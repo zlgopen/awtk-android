@@ -84,7 +84,10 @@ include_directories(${SDL2_SOURCE_DIR}/include
   ${AWTK_SOURCE_DIR}/3rd/nanovg/gl
   ${AWTK_SOURCE_DIR}/3rd/nanovg/base
   ${AWTK_SOURCE_DIR}/3rd/libunibreak
-  ${AWTK_SOURCE_DIR}/src/ext_widgets)
+  ${AWTK_SOURCE_DIR}/src/ext_widgets
+  ${APP_SOURCE_DIR}/3rd
+  ${APP_SOURCE_DIR}/src
+)
 
 #set(CMAKE_C_FLAGS "-Os ")
 #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -s")
@@ -111,7 +114,7 @@ add_library(hidapi SHARED ${SOURCE_FILES})
 target_link_libraries(hidapi ${ANDROID_LIBS})
 
 #application
-file(GLOB APP_SOURCE_FILES  ${APP_SOURCE_DIR}/*.c
+file(GLOB_RECURSE APP_SOURCE_FILES  ${APP_SOURCE_DIR}/*.c
   ${APP_SOURCE_DIR}/*.cpp)
 
 add_library(app SHARED ${APP_SOURCE_FILES})
