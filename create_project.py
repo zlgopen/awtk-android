@@ -195,7 +195,10 @@ def show_result(app_name):
     print("====================================================");
     print("project is created at: build/" + app_name);
     print("to build: ");
+    print(" bash: ");
     print("  cd build/" + app_name + " && ./gradlew build");
+    print(" cmd: ");
+    print("  cd build/" + app_name + " && gradlew build");
     print("====================================================");
 
 def create_project(config, app_root_src):
