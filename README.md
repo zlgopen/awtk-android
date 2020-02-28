@@ -6,6 +6,8 @@ awtk android 移植
 
 安装 android 开发环境比较麻烦，建议花几十块在淘宝上请人安装，绝对物有所值。
 
+> 找人安装Android开发环境的时候，让他把NDK也安装上去。可以用命令行编译，也可以用android studio编译。android studio可以用来调试C代码。
+
 ## 设置 android 环境变量
 
 如果使用bash，可以按下面的方式设置：
@@ -46,9 +48,15 @@ python create_project.py ../awtk/demos/demoui_build.json
 
 * 编译工程
 
+
 ```
 cd build/demoui && ./gradlew build
 ```
+
+> 生成的apk在：build/xxxxxx/app/build/outputs/apk/debug/app-debug.apk 
+> 
+> xxxxxx是你的项目名。
+
 
 ## 创建并编译自己的工程
 
