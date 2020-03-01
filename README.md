@@ -67,3 +67,21 @@ cd build/demoui && ./gradlew build
 > 不同平台有些差异，请酌情修改。建议使用bash，Windows下可以使用git bash。
 
 
+## 其它问题
+
+* 修改sdk路径
+
+如果sdk路径不对，可以直接修改build/xxxxxx/local.properties文件。
+
+```
+sdk.dir=/Users/jim/Library/Android/sdk/
+ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
+```
+
+* 修改cmake的版本号
+
+如果cmake的版本与系统安装的不匹配，可以直接修改build/xxxxxx/app/src/main/cpp/CMakeLists.txt
+
+* 修改gradle的版本号
+
+如果gradle的版本与系统安装的不匹配，可以直接修改build/xxxxxx/build.gradle
