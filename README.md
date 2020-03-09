@@ -85,3 +85,7 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 * 修改gradle的版本号
 
 如果gradle的版本与系统安装的不匹配，可以直接修改build/xxxxxx/build.gradle
+
+* 如果出现 Failed to install the following Android SDK packages as some licences have not been accepted
+
+> 进入SDK/tools/bin，执行.\sdkmanager.bat "platforms;android-28"
