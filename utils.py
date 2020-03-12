@@ -105,12 +105,17 @@ def copy_app_assets(config, app_assets_dst, app_root_src):
     copy_folder(sfrom, app_assets_dst)
 
 
-def set_cmake_includes(config, filename):
+def update_cmake_file(config, filename):
     includes = config_get_includes(config)
     sincludes = '${APP_SOURCE_DIR}/src\n  ${APP_SOURCE_DIR}/3rd\n'
     for f in includes:
         sincludes += '  ${APP_SOURCE_DIR}/' + f + '\n'
     print('process ' + filename)
+
+    cflags = config_get_cflags(config)
+    cppflags = config_get_cppflags(config)
+    file_replace(filename, 'EXTRA_CFLAGS', cflags)
+    file_replace(filename, 'EXTRA_CPPFLAGS', cppflags)
     file_replace(filename, 'EXTRA_INCLUDES', sincludes)
 
 
@@ -133,6 +138,18 @@ def config_get_includes(config):
         return config['includes']
     else:
         return []
+
+def config_get_cflags(config):
+    if 'cflags' in config:
+        return config['cflags']
+    else:
+        return ""
+
+def config_get_cppflags(config):
+    if 'cppflags' in config:
+        return config['cppflags']
+    else:
+        return ""
 
 
 def merge_and_check_config(config, platform):
