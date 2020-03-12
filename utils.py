@@ -113,8 +113,10 @@ def update_cmake_file(config, filename):
     print('process ' + filename)
 
     cflags = config_get_cflags(config)
+    defines = config_get_defines(config)
     cppflags = config_get_cppflags(config)
     file_replace(filename, 'EXTRA_CFLAGS', cflags)
+    file_replace(filename, 'EXTRA_DEFINES', defines)
     file_replace(filename, 'EXTRA_CPPFLAGS', cppflags)
     file_replace(filename, 'EXTRA_INCLUDES', sincludes)
 
@@ -142,6 +144,12 @@ def config_get_includes(config):
 def config_get_cflags(config):
     if 'cflags' in config:
         return config['cflags']
+    else:
+        return ""
+
+def config_get_defines(config):
+    if 'defines' in config:
+        return config['defines']
     else:
         return ""
 
