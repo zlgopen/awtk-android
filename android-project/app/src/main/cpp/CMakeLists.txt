@@ -69,6 +69,11 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/native_window/native_window_sdl.c
 	${AWTK_SOURCE_DIR}/src/dialog_highlighters/*.c
 	${AWTK_SOURCE_DIR}/src/*.c
+	${AWTK_SOURCE_DIR}/src/ubjson/*.c
+	${AWTK_SOURCE_DIR}/src/streams/buffered/*.c
+	${AWTK_SOURCE_DIR}/src/streams/mem/*.c
+	${AWTK_SOURCE_DIR}/src/streams/file/*.c
+	${AWTK_SOURCE_DIR}/src/streams/inet/*.c
 	${AWTK_SOURCE_DIR}/src/input_methods/*.c
 	${AWTK_SOURCE_DIR}/src/lcd/lcd_nanovg.c
 	${AWTK_SOURCE_DIR}/src/main_loop/main_loop_simple.c
