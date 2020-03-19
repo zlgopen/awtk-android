@@ -2,12 +2,20 @@ package org.zlgopen.awtktemplate;
 
 import android.os.Bundle;
 import org.libsdl.app.SDLActivity;
+import org.zlgopen.plugins.PluginManager;
 
 public class MainActivity extends SDLActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PluginManager.start(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PluginManager.stop();
     }
 
     @Override

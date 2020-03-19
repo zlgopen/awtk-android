@@ -8,7 +8,8 @@ from utils import (join_path, show_usage, mkdir_if_not_exist, file_read, file_wr
                    copy_file, copy_folder, copy_glob_files, file_rename, files_replace,
                    copy_awtk_files, copy_app_sources, copy_app_assets, update_cmake_file,
                    config_get_app_full_name, config_get_app_name, config_get_sources,
-                   config_get_includes, merge_and_check_config
+                   config_get_includes, merge_and_check_config, config_get_plugins,
+                   copy_folder_overwrite
                    )
 
 
@@ -17,6 +18,7 @@ ANDROID_NDK_HOME = os.environ.get('ANDROID_NDK_HOME')
 AWTK_ANDROID_DIR = os.path.abspath(os.path.normpath(os.getcwd()))
 BUILD_DIR = join_path(AWTK_ANDROID_DIR, 'build')
 TEMPLATE_DIR = join_path(AWTK_ANDROID_DIR, 'android-project')
+PLUGINS_DIR = join_path(os.getcwd(), '../awtk-mobile-plugins')
 
 if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
     print('ANDROID_HOME or ANDROID_NDK_HOME is not set!')
@@ -24,6 +26,24 @@ if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
 
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
 
+def copy_plugins(config, app_root_dst):
+    plugins = config_get_plugins(config)
+    if len(plugins) == 0:
+        return;
+   
+    sfrom = join_path(PLUGINS_DIR, "src/android/cpp");
+    sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
+    copy_folder_overwrite(sfrom, sto);
+    
+    sfrom = join_path(PLUGINS_DIR, "src/android/java");
+    sto = join_path(app_root_dst, "app/src/main/java");
+    copy_folder_overwrite(sfrom, sto);
+    
+    sfrom = join_path(PLUGINS_DIR, "src/common");
+    sto = join_path(app_root_dst, "app/src/main/cpp/plugins/common");
+    copy_folder_overwrite(sfrom, sto);
+    
+   
 
 def rename_files_content(app_root_dst, app_full_name, app_name):
     files = [
@@ -76,7 +96,6 @@ def create_project(config, app_root_src):
     copy_folder(TEMPLATE_DIR, app_root_dst)
     rename_files_content(app_root_dst, app_full_name, app_name)
     rename_folders_and_files(app_root_dst, app_full_name)
-
     update_local_props(app_root_dst)
     copy_awtk_files(join_path(app_root_dst, 'app/src/main/cpp/awtk'))
     copy_app_sources(config, join_path(
@@ -85,9 +104,9 @@ def create_project(config, app_root_src):
         app_root_dst, 'app/src/main/assets/assets/default/raw'), app_root_src)
     update_cmake_file(config, join_path(
         app_root_dst, "app/src/main/cpp/CMakeLists.txt"))
+    copy_plugins(config, app_root_dst);
 
     show_result(app_name)
-
 
 app_json = ''
 if len(sys.argv) < 2:

@@ -10,6 +10,7 @@ def join_path(root, subdir):
 
 
 AWTK_DIR = join_path(os.getcwd(), '../awtk')
+
 print('AWTK_DIR:' + AWTK_DIR)
 
 
@@ -47,6 +48,23 @@ def copy_folder(src, dst):
         shutil.rmtree(dst)
     shutil.copytree(src, dst)
 
+def copy_folder_overwrite(src, dest, ignore=None):
+    if os.path.isdir(src):
+        if not os.path.isdir(dest):
+            os.makedirs(dest)
+        files = os.listdir(src)
+        if ignore is not None:
+            ignored = ignore(src, files)
+        else:
+            ignored = set()
+        for f in files:
+            if f not in ignored:
+                copy_folder_overwrite(os.path.join(src, f), 
+                                    os.path.join(dest, f), 
+                                    ignore)
+    else:
+        shutil.copyfile(src, dest)
+
 
 def copy_file(src, dst):
     print(src + '=>' + dst)
@@ -55,6 +73,7 @@ def copy_file(src, dst):
 
 
 def copy_glob_files(src, srcdir, dstdir):
+    print(src +  " =>"  +  dstdir);
     files = glob.glob(src)
     for f in files:
         dst = join_path(dstdir, f[len(srcdir)+1:])
@@ -158,6 +177,12 @@ def config_get_cppflags(config):
         return config['cppflags']
     else:
         return ""
+
+def config_get_plugins(config):
+    if 'plugins' in config:
+        return config['plugins']
+    else:
+        return []
 
 
 def merge_and_check_config(config, platform):

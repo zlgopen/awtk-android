@@ -11,6 +11,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 set(APP_SOURCE_DIR "app")
+set(PLUGINS_SOURCE_DIR "plugins")
 set(AWTK_SOURCE_DIR "awtk")
 set(SDL2_SOURCE_DIR "awtk/3rd/SDL")
 
@@ -90,6 +91,7 @@ include_directories(${SDL2_SOURCE_DIR}/include
   ${AWTK_SOURCE_DIR}/3rd/nanovg/base
   ${AWTK_SOURCE_DIR}/3rd/libunibreak
   ${AWTK_SOURCE_DIR}/src/ext_widgets
+  ${PLUGINS_SOURCE_DIR}
   EXTRA_INCLUDES
 )
 
@@ -133,8 +135,14 @@ add_library(hidapi SHARED ${SOURCE_FILES})
 target_link_libraries(hidapi ${ANDROID_LIBS})
 
 #application
-file(GLOB_RECURSE APP_SOURCE_FILES  ${APP_SOURCE_DIR}/*.c
-  ${APP_SOURCE_DIR}/*.cpp)
+file(GLOB_RECURSE APP_SOURCE_FILES  
+  ${PLUGINS_SOURCE_DIR}/**/*.c
+  ${PLUGINS_SOURCE_DIR}/**/*.cpp
+  ${APP_SOURCE_DIR}/*.c
+  ${APP_SOURCE_DIR}/*.cpp
+  ${APP_SOURCE_DIR}/**/*.c
+  ${APP_SOURCE_DIR}/**/*.cpp
+  )
 
 add_library(app SHARED ${APP_SOURCE_FILES})
 target_link_libraries(app ${ANDROID_LIBS} awtk)
