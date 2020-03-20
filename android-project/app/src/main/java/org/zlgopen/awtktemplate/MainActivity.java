@@ -1,6 +1,7 @@
 package org.zlgopen.awtktemplate;
 
 import android.os.Bundle;
+import android.content.Intent;
 import org.libsdl.app.SDLActivity;
 import org.zlgopen.plugins.PluginManager;
 
@@ -16,6 +17,12 @@ public class MainActivity extends SDLActivity {
     protected void onDestroy() {
         super.onDestroy();
         PluginManager.stop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        PluginManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

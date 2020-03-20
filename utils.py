@@ -49,6 +49,7 @@ def copy_folder(src, dst):
     shutil.copytree(src, dst)
 
 def copy_folder_overwrite(src, dest, ignore=None):
+    print(src + " => " + dest);
     if os.path.isdir(src):
         if not os.path.isdir(dest):
             os.makedirs(dest)

@@ -31,18 +31,25 @@ def copy_plugins(config, app_root_dst):
     if len(plugins) == 0:
         return;
    
-    sfrom = join_path(PLUGINS_DIR, "src/android/cpp");
+    sfrom = join_path(PLUGINS_DIR, "src/common/*.*");
+    sfrom_dir = join_path(PLUGINS_DIR, "src");
     sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
-    copy_folder_overwrite(sfrom, sto);
+    copy_glob_files(sfrom, sfrom_dir, sto);
     
-    sfrom = join_path(PLUGINS_DIR, "src/android/java");
+    sfrom = join_path(PLUGINS_DIR, "src/common/android/java");
     sto = join_path(app_root_dst, "app/src/main/java");
     copy_folder_overwrite(sfrom, sto);
+   
+    for p in plugins:
+        sfrom = join_path(PLUGINS_DIR, "src/share/*.*");
+        sfrom_dir = join_path(PLUGINS_DIR, "src");
+        sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
+        copy_glob_files(sfrom, sfrom_dir, sto);
     
-    sfrom = join_path(PLUGINS_DIR, "src/common");
-    sto = join_path(app_root_dst, "app/src/main/cpp/plugins/common");
-    copy_folder_overwrite(sfrom, sto);
-    
+        sfrom = join_path(PLUGINS_DIR, "src/share/android/java");
+        sto = join_path(app_root_dst, "app/src/main/java");
+        copy_folder_overwrite(sfrom, sto);
+
    
 
 def rename_files_content(app_root_dst, app_full_name, app_name):

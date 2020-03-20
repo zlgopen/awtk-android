@@ -15,4 +15,8 @@ public class PluginManager {
   public static void stop() {
     Log.v("AWTK", "PluginManager(dummy) stop");
   }
+
+  public static void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Log.v("AWTK", "PluginManager(dummy) onActivityResult");
+  }
 }
