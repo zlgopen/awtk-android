@@ -26,6 +26,57 @@ if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
 
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
 
+def apply_plugins_config(config, app_root_dst):
+    names = []
+    activities = []
+    permissions = []
+    dependencies = []
+
+    plugins = config_get_plugins(config)
+    if len(plugins) == 0:
+        return;
+    
+    for p in plugins:
+        plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
+        print(plugin_json)
+        with open(plugin_json, 'r') as f:
+            plugin_config = json.load(f);
+            if 'android' in plugin_config:
+                names.append(plugin_config['name']);
+                android_config = plugin_config['android'];
+                if 'permissions' in android_config:
+                    permissions += android_config['permissions']
+                if 'activities' in android_config:
+                    activities += android_config['activities']
+                if 'dependencies' in android_config:
+                    dependencies += android_config['dependencies']
+    activities = sorted(set(activities))
+    permissions = sorted(set(permissions))
+    dependencies = sorted(set(dependencies))
+
+    activities = '\n    '.join(activities);
+    permissions = '\n    '.join(permissions);
+    dependencies = '\n    '.join(dependencies);
+
+    filename = join_path(app_root_dst, 'app/build.gradle')
+    file_replace(filename, 'EXTRA_DEPENDENCIES', dependencies);
+    
+    filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
+    file_replace(filename, 'EXTRA_ACTIVITIES', activities);
+    file_replace(filename, 'EXTRA_PERMISSION', permissions);
+
+
+    imports = ''
+    registers = ''
+    
+    for name in names:
+        registers += 'PluginManager.register(\"'
+        registers += name.lower()+'\", new '+name+'(PluginManager.activity, id++));\n';
+
+    filename = join_path(app_root_dst, 'app/src/main/java/org/zlgopen/plugins/common/PluginManager.java')
+    file_replace(filename, 'EXTRA_IMPORTS', imports);
+    file_replace(filename, 'EXTRA_REGISTERS', registers);
+
 def copy_plugins(config, app_root_dst):
     plugins = config_get_plugins(config)
     if len(plugins) == 0:
@@ -41,12 +92,12 @@ def copy_plugins(config, app_root_dst):
     copy_folder_overwrite(sfrom, sto);
    
     for p in plugins:
-        sfrom = join_path(PLUGINS_DIR, "src/share/*.*");
+        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/*.*");
         sfrom_dir = join_path(PLUGINS_DIR, "src");
         sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
         copy_glob_files(sfrom, sfrom_dir, sto);
     
-        sfrom = join_path(PLUGINS_DIR, "src/share/android/java");
+        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/android/java");
         sto = join_path(app_root_dst, "app/src/main/java");
         copy_folder_overwrite(sfrom, sto);
 
@@ -111,7 +162,9 @@ def create_project(config, app_root_src):
         app_root_dst, 'app/src/main/assets/assets/default/raw'), app_root_src)
     update_cmake_file(config, join_path(
         app_root_dst, "app/src/main/cpp/CMakeLists.txt"))
+
     copy_plugins(config, app_root_dst);
+    apply_plugins_config(config, app_root_dst);
 
     show_result(app_name)
 

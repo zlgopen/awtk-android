@@ -37,6 +37,7 @@ def file_write(name, content):
 
 
 def file_replace(name, sfrom, sto):
+    print("process:" + name);
     content = file_read(name)
     new_content = content.replace(sfrom, sto)
     file_write(name, new_content)
