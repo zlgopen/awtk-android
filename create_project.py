@@ -33,8 +33,6 @@ def apply_plugins_config(config, app_root_dst):
     dependencies = []
 
     plugins = config_get_plugins(config)
-    if len(plugins) == 0:
-        return;
     
     for p in plugins:
         plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');

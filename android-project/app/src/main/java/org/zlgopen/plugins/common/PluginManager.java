@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Iterator;
 import android.app.Activity;
+import android.content.Intent;
 
 public class PluginManager {
   public static void start(Activity activity) {
