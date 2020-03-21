@@ -27,7 +27,7 @@ if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
 
 def apply_plugins_config(config, app_root_dst):
-    names = []
+    nameClassPairs = []
     activities = []
     permissions = []
     dependencies = []
@@ -36,18 +36,24 @@ def apply_plugins_config(config, app_root_dst):
     
     for p in plugins:
         plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
-        print(plugin_json)
+
         with open(plugin_json, 'r') as f:
             plugin_config = json.load(f);
+            name = plugin_config['name'];
+
             if 'android' in plugin_config:
-                names.append(plugin_config['name']);
                 android_config = plugin_config['android'];
+                if 'class' in android_config:
+                    className = android_config['class']
+                    nameClassPairs.append((name, className))
                 if 'permissions' in android_config:
                     permissions += android_config['permissions']
                 if 'activities' in android_config:
                     activities += android_config['activities']
                 if 'dependencies' in android_config:
                     dependencies += android_config['dependencies']
+                    
+
     activities = sorted(set(activities))
     permissions = sorted(set(permissions))
     dependencies = sorted(set(dependencies))
@@ -67,9 +73,10 @@ def apply_plugins_config(config, app_root_dst):
     imports = ''
     registers = ''
     
-    for name in names:
+    for iter in nameClassPairs:
+        name,className = iter
         registers += 'PluginManager.register(\"'
-        registers += name.lower()+'\", new '+name+'(PluginManager.activity, id++));\n';
+        registers += name.lower()+'\", new '+className+'(PluginManager.activity, id++));\n';
 
     filename = join_path(app_root_dst, 'app/src/main/java/org/zlgopen/plugins/common/PluginManager.java')
     file_replace(filename, 'EXTRA_IMPORTS', imports);
