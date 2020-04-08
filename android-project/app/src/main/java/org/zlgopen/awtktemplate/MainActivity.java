@@ -1,4 +1,4 @@
-package org.zlgopen.awtktemplate;
+package org.zlgopen.image_pickerdemo;
 
 import android.os.Bundle;
 import android.content.Intent;
@@ -23,6 +23,12 @@ public class MainActivity extends SDLActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         PluginManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+          String[] permissions, int[] grantResults) {
+        PluginManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
