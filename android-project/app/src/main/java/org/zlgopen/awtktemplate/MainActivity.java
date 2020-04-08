@@ -1,4 +1,4 @@
-package org.zlgopen.image_pickerdemo;
+package org.zlgopen.awtktemplate;
 
 import android.os.Bundle;
 import android.content.Intent;
