@@ -84,8 +84,6 @@ def apply_plugins_config(config, app_root_dst):
 
 def copy_plugins(config, app_root_dst):
     plugins = config_get_plugins(config)
-    if len(plugins) == 0:
-        return;
    
     sfrom = join_path(PLUGINS_DIR, "src/common/*.*");
     sfrom_dir = join_path(PLUGINS_DIR, "src");
