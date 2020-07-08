@@ -29,6 +29,7 @@ export PATH=$PATH:$NDK_HOME:$PLATFORM_TOOLS_HOME
 ```
 git clone https://github.com/zlgopen/awtk.git
 git clone https://github.com/zlgopen/awtk-android.git
+git clone https://github.com/zlgopen/awtk-mobile-plugins.git
 ```
 
 ## 创建并编译 demoui 的工程
@@ -76,7 +77,7 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 
 * 2. 修改 cmake 的版本号
 
-如果 cmake 的版本与系统安装的不匹配，可以直接修改 build/xxxxxx/app/src/main/cpp/CMakeLists.txt
+如果 cmake 的版本与系统安装的不匹配，可以直接修改 build/xxxxxx/app/src/main/cpp/CMakeLists.txt 和build/xxxxxx/app/build.gradle
 
 * 3. 修改 gradle 的版本号
 
@@ -98,5 +99,8 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 
 手机 APP 需要提供不同屏幕密度的图标，请参考[LCD 密度与图片的对应关系](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/images/README.md)
 
+* 8. 用android studio调试
+
+[用android studio调试](docs/how_to_debug_app_with_android_studio.md)
 
 
