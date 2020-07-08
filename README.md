@@ -12,8 +12,6 @@ awtk android 移植
 
 如果使用 bash，可以按下面的方式设置：
 
-> Windows 下可以使用 git bash，或者设置到系统环境变量中。
-
 ```
 export ANDROID_HOME=/Users/jim/Library/Android/sdk/
 export ANDROID_NDK_HOME=/Users/jim/Library/Android/sdk/ndk-bundle/
@@ -64,6 +62,12 @@ cd build/demoui && ./gradlew build
 
 > 不同平台有些差异，请酌情修改。建议使用 bash，Windows 下可以使用 git bash。
 
+## 文档
+
+* [用 android studio 调试应用程序](docs/how_to_debug_app_with_android_studio.md)
+
+* [在 Windows 下编译 awtk android 版本](docs/build_on_windows.md)
+
 ## 其它问题
 
 * 1. 修改 sdk 路径
@@ -77,7 +81,7 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 
 * 2. 修改 cmake 的版本号
 
-如果 cmake 的版本与系统安装的不匹配，可以直接修改 build/xxxxxx/app/src/main/cpp/CMakeLists.txt 和build/xxxxxx/app/build.gradle
+如果 cmake 的版本与系统安装的不匹配，可以直接修改 build/xxxxxx/app/src/main/cpp/CMakeLists.txt 和 build/xxxxxx/app/build.gradle
 
 * 3. 修改 gradle 的版本号
 
@@ -97,10 +101,4 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 
 * 7. 图标大小
 
-手机 APP 需要提供不同屏幕密度的图标，请参考[LCD 密度与图片的对应关系](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/images/README.md)
-
-* 8. 用android studio调试
-
-[用android studio调试](docs/how_to_debug_app_with_android_studio.md)
-
-
+手机 APP 需要提供不同屏幕密度的图标，请参考 [LCD 密度与图片的对应关系](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/images/README.md)
