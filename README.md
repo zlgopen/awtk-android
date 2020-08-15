@@ -68,6 +68,10 @@ cd build/demoui && ./gradlew build
 
 * [在 Windows 下编译 awtk android 版本](docs/build_on_windows.md)
 
+## 相关项目
+
+* [awtk-mobile-plugins](https://github.com/zlgopen/awtk-mobile-plugins) 用于访问手机平台 (android/ios) 原生服务的插件(如分享、登录、相机、扫描二维码和蓝牙等)
+
 ## 其它问题
 
 * 1. 修改 sdk 路径
