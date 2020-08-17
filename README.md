@@ -41,7 +41,7 @@ cd awtk-android
 * 创建工程
 
 ```
-python create_project.py ../awtk/demos/demoui_build.json
+python create_project.py ../awtk/build.json
 ```
 
 * 编译工程

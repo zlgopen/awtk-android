@@ -128,7 +128,7 @@ def copy_app_assets(config, app_assets_dst, app_root_src):
 
 def update_cmake_file(config, filename):
     includes = config_get_includes(config)
-    sincludes = '${APP_SOURCE_DIR}/src\n  ${APP_SOURCE_DIR}/3rd\n'
+    sincludes = '${APP_SOURCE_DIR}/res\n ${APP_SOURCE_DIR}/src\n  ${APP_SOURCE_DIR}/3rd\n'
     for f in includes:
         sincludes += '  ${APP_SOURCE_DIR}/' + f + '\n'
     print('process ' + filename)
