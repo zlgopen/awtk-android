@@ -71,6 +71,7 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/dialog_highlighters/*.c
 	${AWTK_SOURCE_DIR}/src/*.c
 	${AWTK_SOURCE_DIR}/src/ubjson/*.c
+	${AWTK_SOURCE_DIR}/src/streams/serial/*.c
 	${AWTK_SOURCE_DIR}/src/streams/buffered/*.c
 	${AWTK_SOURCE_DIR}/src/streams/mem/*.c
 	${AWTK_SOURCE_DIR}/src/streams/file/*.c
