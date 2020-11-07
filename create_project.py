@@ -26,6 +26,11 @@ if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
 
 print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
 
+def is_fullscreen(config):
+    if 'features' in config and 'fullscreen' in config['features']:
+        return True
+    return False
+    
 def apply_plugins_config(config, app_root_dst):
     nameClassPairs = []
     activities = []
@@ -33,7 +38,13 @@ def apply_plugins_config(config, app_root_dst):
     dependencies = []
 
     plugins = config_get_plugins(config)
-    
+    if is_fullscreen(config):
+        activityPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar.Fullscreen"'
+        appPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar"'
+    else:
+        activityPreferTheme = 'android:theme="@style/AppTheme"'
+        appPreferTheme = ''
+
     for p in plugins:
         plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
 
@@ -68,6 +79,9 @@ def apply_plugins_config(config, app_root_dst):
     filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
     file_replace(filename, 'EXTRA_ACTIVITIES', activities);
     file_replace(filename, 'EXTRA_PERMISSION', permissions);
+
+    file_replace(filename, 'APP_PREFER_THEME', appPreferTheme);
+    file_replace(filename, 'ACTIVITY_PREFER_THEME', activityPreferTheme);
 
 
     imports = ''

@@ -37,7 +37,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        APP_PREFER_THEME
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true">
 
@@ -45,6 +45,7 @@
         <activity android:name=".MainActivity"
         android:alwaysRetainTaskState="true"
         android:launchMode="singleInstance"
+        ACTIVITY_PREFER_THEME
         android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
