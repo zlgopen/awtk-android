@@ -31,6 +31,20 @@ def is_fullscreen(config):
         return True
     return False
     
+def apply_features(config, app_root_dst):
+    if is_fullscreen(config):
+        activityPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar.Fullscreen"'
+        appPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar"'
+        filename = join_path(app_root_dst, 'app/src/main/java/org/libsdl/app/SDLActivity.java')
+        file_replace(filename, '//setWindowStyle(false);', "setWindowStyle(true);");
+    else:
+        activityPreferTheme = 'android:theme="@style/AppTheme"'
+        appPreferTheme = ''
+
+    filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
+    file_replace(filename, 'APP_PREFER_THEME', appPreferTheme);
+    file_replace(filename, 'ACTIVITY_PREFER_THEME', activityPreferTheme);
+
 def apply_plugins_config(config, app_root_dst):
     nameClassPairs = []
     activities = []
@@ -38,12 +52,6 @@ def apply_plugins_config(config, app_root_dst):
     dependencies = []
 
     plugins = config_get_plugins(config)
-    if is_fullscreen(config):
-        activityPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar.Fullscreen"'
-        appPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar"'
-    else:
-        activityPreferTheme = 'android:theme="@style/AppTheme"'
-        appPreferTheme = ''
 
     for p in plugins:
         plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
@@ -79,10 +87,6 @@ def apply_plugins_config(config, app_root_dst):
     filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
     file_replace(filename, 'EXTRA_ACTIVITIES', activities);
     file_replace(filename, 'EXTRA_PERMISSION', permissions);
-
-    file_replace(filename, 'APP_PREFER_THEME', appPreferTheme);
-    file_replace(filename, 'ACTIVITY_PREFER_THEME', activityPreferTheme);
-
 
     imports = ''
     registers = ''
@@ -181,6 +185,7 @@ def create_project(config, app_root_src):
         app_root_dst, "app/src/main/cpp/CMakeLists.txt"))
 
     copy_plugins(config, app_root_dst);
+    apply_features(config, app_root_dst);
     apply_plugins_config(config, app_root_dst);
 
     show_result(app_name)
