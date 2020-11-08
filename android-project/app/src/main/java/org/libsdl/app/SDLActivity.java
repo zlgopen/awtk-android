@@ -264,7 +264,7 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
 
         setContentView(mLayout);
 
-        setWindowStyle(false);
+        //setWindowStyle(false);
 
         getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(this);
 
