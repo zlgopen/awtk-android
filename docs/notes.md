@@ -42,10 +42,9 @@ dependencies {
     }
 ```    
 
-### 3. 指定cmake的编译参数
+### 3. 指定 cmake 的编译参数
 
-
-修改 build.gradle即可。如：
+修改 build.gradle 即可。如：
 
 ```
     externalNativeBuild {
@@ -58,4 +57,10 @@ dependencies {
     ndk {
       abiFilters 'armeabi-v7a'
     }
-```        
+```       
+
+### 4. 使用自定义控件
+
+最简单的办法就是，直接将自定义的控件代码拷贝到 awtk/src/ext_widgets 目录下。
+
+比如，使用 table-view 控件，把 awtk-widget-table-view/src 下的全部文件拷贝到 awtk/src/ext_widgets 下，重新生成工程就可以了。
