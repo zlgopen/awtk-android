@@ -10,7 +10,7 @@ awtk android 移植
 
 ## 设置 android 环境变量
 
-如果使用 bash，可以按下面的方式设置：
+* Linux/MacOS Bash 下设置环境变量示例：
 
 ```
 export ANDROID_HOME=/Users/jim/Library/Android/sdk/
@@ -20,7 +20,36 @@ export PLATFORM_TOOLS_HOME=/Users/jim/Library/Android/sdk/platform-tools
 export PATH=$PATH:$NDK_HOME:$PLATFORM_TOOLS_HOME
 ```
 
-> 具体路径请根据自己的情况进行调整。
+* Windows Bash 下设置环境变量示例：
+
+```
+export ANDROID_HOME=/c/Users/Admin/AppData/Local/Android/Sdk
+export ANDROID_NDK_HOME=/c/Users/Admin/AppData/Local/Android/Sdk/ndk/21.3.6528147
+export PLATFORM_TOOLS_HOME=/c/Users/Admin/AppData/Local/Android/Sdk/platform-tools
+
+export PATH=$PATH:$ANDROID_NDK_HOME:$PLATFORM_TOOLS_HOME
+```
+
+* Windows Cmd 下设置环境变量示例：
+
+```
+set JAVA_HOME="C:/Program Files/Android/Android Studio/jre"
+set ANDROID_HOME=C:/Users/Admin/AppData/Local/Android/Sdk
+set ANDROID_NDK_HOME=C:/Users/Admin/AppData/Local/Android/Sdk/ndk/21.3.6528147
+set Path=%Path%:%ANDROID_NDK_HOME%
+
+```
+
+* Windows PowerShell 下设置环境变量示例：
+
+```
+$env:JAVA_HOME="C:/Program Files/Android/Android Studio/jre"
+$env:ANDROID_HOME="C:/Users/Admin/AppData/Local/Android/Sdk"
+$env:ANDROID_NDK_HOME="C:/Users/Admin/AppData/Local/Android/Sdk/ndk/21.3.6528147"
+$env:PATH="$env:PATH;C:/Users/Admin/AppData/Local/Android/Sdk/ndk/21.3.6528147"
+```
+
+> 具体路径请根据自己的情况进行调整，路径分隔符请用'/'，不要用 '\'。
 
 ## 下载 awtk 和 awtk-android 源码
 
@@ -70,7 +99,7 @@ cd build/demoui && ./gradlew build
 
 ## 相关项目
 
-* [awtk-mobile-plugins](https://github.com/zlgopen/awtk-mobile-plugins) 用于访问手机平台 (android/ios) 原生服务的插件(如分享、登录、相机、扫描二维码和蓝牙等)
+* [awtk-mobile-plugins](https://github.com/zlgopen/awtk-mobile-plugins) 用于访问手机平台 (android/ios) 原生服务的插件（如分享、登录、相机、扫描二维码和蓝牙等）
 
 ## 其它问题
 
@@ -106,3 +135,12 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 * 7. 图标大小
 
 手机 APP 需要提供不同屏幕密度的图标，请参考 [LCD 密度与图片的对应关系](https://github.com/zlgopen/awtk/blob/master/demos/assets/default/raw/images/README.md)
+
+* 8. 设置 gradle 的版本和 socks 代理，请修改 ~/.gradle/gradle.properties
+
+如：
+
+```
+distributionUrl=https\://services.gradle.org/distributions/gradle-6.3-all.zip
+org.gradle.jvmargs=-DsocksProxyHost\=127.0.0.1 -DsocksProxyPort\=1080
+```
