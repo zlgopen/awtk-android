@@ -122,7 +122,11 @@ def copy_plugins(config, app_root_dst):
         sto = join_path(app_root_dst, "app/src/main/java");
         copy_folder_overwrite(sfrom, sto);
 
-   
+        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/android/aidl");
+        sto = join_path(app_root_dst, "app/src/main/aidl");
+        if os.path.exists(sfrom):
+          copy_folder_overwrite(sfrom, sto);
+
 
 def rename_files_content(app_root_dst, app_full_name, app_name):
     files = [
