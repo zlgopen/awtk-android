@@ -77,6 +77,7 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/streams/file/*.c
 	${AWTK_SOURCE_DIR}/src/streams/inet/*.c
 	${AWTK_SOURCE_DIR}/src/conf_io/*.c
+	${AWTK_SOURCE_DIR}/src/charset/*.c
 	${AWTK_SOURCE_DIR}/src/input_methods/*.c
 	${AWTK_SOURCE_DIR}/src/lcd/lcd_nanovg.c
 	${AWTK_SOURCE_DIR}/src/main_loop/main_loop_simple.c
