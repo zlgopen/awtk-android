@@ -65,6 +65,12 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/ext_widgets/*/*.c
 	${AWTK_SOURCE_DIR}/src/custom_widgets/*.c
 	${AWTK_SOURCE_DIR}/src/custom_widgets/*/*.c
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*.cc
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*/*.cc
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*.cxx
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*/*.cxx
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*.cpp
+	${AWTK_SOURCE_DIR}/src/custom_widgets/*/*.cpp
 	${AWTK_SOURCE_DIR}/src/image_loader/*.c
 	${AWTK_SOURCE_DIR}/src/widget_animators/*.c
 	${AWTK_SOURCE_DIR}/src/window_animators/*.c
