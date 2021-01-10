@@ -149,7 +149,7 @@ org.gradle.jvmargs=-DsocksProxyHost\=127.0.0.1 -DsocksProxyPort\=1080
 
 修改 app/build.gradle(23 行处），在 buildTypes 中增加 abiFilters 即可。
 
-比如，只编译"armeabi-v7a", "arm64-v8a"，可以这样修改：
+比如，只编译"arm64-v8a"，可以这样修改：
 
 原来的：
 ```
@@ -168,10 +168,17 @@ org.gradle.jvmargs=-DsocksProxyHost\=127.0.0.1 -DsocksProxyPort\=1080
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
-              abiFilters "armeabi-v7a", "arm64-v8a"
-            }   
-        }   
-    }  
+             abiFilters "arm64-v8a"
+            }
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+             abiFilters "arm64-v8a"
+            }
+        }
+    }
 ```
 
 arch 的可选的值：
@@ -184,3 +191,6 @@ mips
 x86
 x86_64
 ```
+
+> 编译多个arch时，用逗号分隔。
+
