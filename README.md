@@ -144,3 +144,43 @@ ndk.dir=/Users/jim/Library/Android/sdk/ndk-bundle/
 distributionUrl=https\://services.gradle.org/distributions/gradle-6.3-all.zip
 org.gradle.jvmargs=-DsocksProxyHost\=127.0.0.1 -DsocksProxyPort\=1080
 ```
+
+* 9. 只编译特定 arch 的版本
+
+修改 app/build.gradle(23 行处），在 buildTypes 中增加 abiFilters 即可。
+
+比如，只编译"armeabi-v7a", "arm64-v8a"，可以这样修改：
+
+原来的：
+```
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }   
+    }  
+```
+
+修改后的：
+```
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            ndk {
+              abiFilters "armeabi-v7a", "arm64-v8a"
+            }   
+        }   
+    }  
+```
+
+arch 的可选的值：
+
+```
+arm64-v8a
+armeabi
+armeabi-v7a
+mips
+x86
+x86_64
+```
