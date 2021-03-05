@@ -136,9 +136,12 @@ def copy_app_sources(config, app_sources_dst, app_root_src):
 
 def copy_app_assets(config, app_assets_dst, app_root_src):
     assets_dir = config['assets']
-    sfrom = join_path(app_root_src, assets_dir + '/default/raw')
-    copy_folder(sfrom, app_assets_dst)
-
+    themes = config_get_themes(config)
+    for t in themes:
+      print("copy theme:");
+      src = join_path(app_root_src, assets_dir + "/" + t + '/raw');
+      dst = join_path(app_assets_dst, t + '/raw');
+      copy_folder(src, dst)
 
 def update_cmake_file(config, filename):
     includes = config_get_includes(config)
@@ -175,6 +178,13 @@ def config_get_includes(config):
         return config['includes']
     else:
         return []
+
+def config_get_themes(config):
+    if 'themes' in config:
+        return config['themes']
+    else:
+        return ["default"]
+
 
 def config_get_cflags(config):
     if 'cflags' in config:
