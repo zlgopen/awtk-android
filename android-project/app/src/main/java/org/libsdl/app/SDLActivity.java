@@ -10,7 +10,6 @@ import java.lang.Math;
 import android.app.*;
 import android.content.*;
 import android.content.res.Configuration;
-import android.text.InputType;
 import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -934,6 +933,8 @@ public class SDLActivity extends Activity implements View.OnSystemUiVisibilityCh
             } else {
                 mTextEdit.setLayoutParams(params);
             }
+            DummyEdit dummyEdit = (DummyEdit)mTextEdit;
+            dummyEdit.incUsedTimes();
 
             mTextEdit.setVisibility(View.VISIBLE);
             mTextEdit.requestFocus();
@@ -1888,6 +1889,17 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
  */
 class DummyEdit extends View implements View.OnKeyListener {
     InputConnection ic;
+    //
+    //第一次启动软键盘时，无法输入backspace/return等按键，没有找到原因，只好打个补丁：
+    //第一次启动时，通过InputConnection补发按键消息。
+    //
+    private int usedTimes = 0;
+    public void incUsedTimes() {
+        this.usedTimes++;
+    }
+    public boolean isFirstTime() {
+        return this.usedTimes == 1;
+    }
 
     public DummyEdit(Context context) {
         super(context);
@@ -1950,10 +1962,11 @@ class DummyEdit extends View implements View.OnKeyListener {
 }
 
 class SDLInputConnection extends BaseInputConnection {
+    DummyEdit edit;
 
-    public SDLInputConnection(View targetView, boolean fullEditor) {
+    public SDLInputConnection(DummyEdit targetView, boolean fullEditor) {
         super(targetView, fullEditor);
-
+        this.edit = targetView;
     }
 
     @Override
@@ -1982,6 +1995,9 @@ class SDLInputConnection extends BaseInputConnection {
             }
         }
 
+        if(this.edit.isFirstTime()) {
+            this.edit.onKey(this.edit, event.getKeyCode(), event);
+        }
 
         return super.sendKeyEvent(event);
     }
