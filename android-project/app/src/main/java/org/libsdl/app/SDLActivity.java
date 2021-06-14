@@ -1889,10 +1889,6 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
  */
 class DummyEdit extends View implements View.OnKeyListener {
     InputConnection ic;
-    //
-    //第一次启动软键盘时，无法输入backspace/return等按键，没有找到原因，只好打个补丁：
-    //第一次启动时，通过InputConnection补发按键消息。
-    //
     private int usedTimes = 0;
     public void incUsedTimes() {
         this.usedTimes++;
