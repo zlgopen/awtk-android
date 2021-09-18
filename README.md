@@ -2,6 +2,8 @@
 
 awtk android 移植
 
+> [预编译的demoui APK](http://zlgawtk.bceapp.com/awtk/demos/demoui.apk)
+
 ## 安装 android 开发环境
 
 安装 android 开发环境比较麻烦，建议花几十块在淘宝上请人安装，绝对物有所值。
