@@ -49,6 +49,7 @@ file(GLOB SOURCE_FILES
 	${SDL2_SOURCE_DIR}/src/video/android/*.c
 	${SDL2_SOURCE_DIR}/src/video/yuv2rgb/*.c
 	${AWTK_SOURCE_DIR}/3rd/libunibreak/*.c
+	${AWTK_SOURCE_DIR}/3rd/gpinyin/src/*.cpp
 	${AWTK_SOURCE_DIR}/3rd/nanovg/base/*.c
 	${AWTK_SOURCE_DIR}/src/tkc/*.c
 	${AWTK_SOURCE_DIR}/src/base/*.c
@@ -89,6 +90,7 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/fscript_ext/*.c
 	${AWTK_SOURCE_DIR}/src/charset/*.c
 	${AWTK_SOURCE_DIR}/src/input_methods/*.c
+	${AWTK_SOURCE_DIR}/src/input_engines/input_engine_pinyin.cpp
 	${AWTK_SOURCE_DIR}/src/lcd/lcd_nanovg.c
 	${AWTK_SOURCE_DIR}/src/main_loop/main_loop_simple.c
 	${AWTK_SOURCE_DIR}/src/main_loop/main_loop_sdl.c
@@ -102,6 +104,7 @@ include_directories(${SDL2_SOURCE_DIR}/include
   ${AWTK_SOURCE_DIR}/3rd/nanovg
   ${AWTK_SOURCE_DIR}/3rd/nanovg/gl
   ${AWTK_SOURCE_DIR}/3rd/nanovg/base
+  ${AWTK_SOURCE_DIR}/3rd/gpinyin/include
   ${AWTK_SOURCE_DIR}/3rd/libunibreak
   ${AWTK_SOURCE_DIR}/src/ext_widgets
   ${AWTK_SOURCE_DIR}/src/custom_widgets
@@ -141,6 +144,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSDL_VIDEO_OPENGL_EGL -DSDL_VIDEO_OPENG
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DSDL_TIMER_UNIX -DHAS_PTHREAD ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_DATA_READER_WRITER=1 ")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAS_GET_TIME_US64=1 ")
+
+#if you want use awtk input method instead of android input method please uncomment the following two lines
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEFAULT_IM=1 -DWITH_IME_PINYIN=1 ")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_DEFAULT_IM=1 -DWITH_IME_PINYIN=1 ")
 
 if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
     include_directories(${ANDROID_SYSROOT}/usr/include/arm-linux-androideabi)

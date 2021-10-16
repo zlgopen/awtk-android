@@ -199,4 +199,17 @@ x86_64
 * 10. 输入法第一次弹出时，无法使用删除键。
 
 > 第一次启动软键盘时，无法输入backspace/return等按键，没有找到原因，只好打个补丁：第一次启动时，通过InputConnection补发按键消息。
-    
+   
+ 
+* 11. 使用AWTK内置的输入法
+
+修改 app/src/main/cpp/CMakeLists.txt，放开下面两行代码。
+
+```
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWITH_DEFAULT_IM=1 -DWITH_IME_PINYIN=1 ")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITH_DEFAULT_IM=1 -DWITH_IME_PINYIN=1 ")
+```
+
+> 对于旧的项目，可以加到if(${ANDROID_ABI} STREQUAL "armeabi-v7a")之前
+
+
