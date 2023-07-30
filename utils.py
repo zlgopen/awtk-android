@@ -3,7 +3,7 @@ import sys
 import glob
 import json
 import shutil
-
+import config_helper as helper
 
 def join_path(root, subdir):
     return os.path.abspath(os.path.normpath(os.path.join(root, subdir)))
@@ -143,6 +143,11 @@ def copy_app_assets(config, app_assets_dst, app_root_src):
       dst = join_path(app_assets_dst, t + '/raw');
       copy_folder(src, dst)
 
+def to_string(input):
+    if isinstance(input, list):
+        return ' '.join(input)
+    return str(input)
+
 def update_cmake_file(config, filename):
     includes = config_get_includes(config)
     sincludes = '${APP_SOURCE_DIR}/res\n ${APP_SOURCE_DIR}/src\n  ${APP_SOURCE_DIR}/3rd\n'
@@ -150,9 +155,9 @@ def update_cmake_file(config, filename):
         sincludes += '  ${APP_SOURCE_DIR}/' + f + '\n'
     print('process ' + filename)
 
-    cflags = config_get_cflags(config)
-    defines = config_get_defines(config)
-    cppflags = config_get_cppflags(config)
+    cflags = to_string(config_get_cflags(config))
+    defines = to_string(config_get_defines(config))
+    cppflags = to_string(config_get_cppflags(config))
     file_replace(filename, 'EXTRA_CFLAGS', cflags)
     file_replace(filename, 'EXTRA_DEFINES', defines)
     file_replace(filename, 'EXTRA_CPPFLAGS', cppflags)
@@ -211,10 +216,8 @@ def config_get_plugins(config):
         return []
 
 
-def merge_and_check_config(config, platform):
-    for key in config[platform]:
-        config[key] = config[platform][key]
-
+def load_config(filename, platform):
+    config = helper.load_app_config(filename, platform);
     app_full_name = config_get_app_full_name(config)
     items = app_full_name.split('.')
 

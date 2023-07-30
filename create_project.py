@@ -8,7 +8,7 @@ from utils import (join_path, show_usage, mkdir_if_not_exist, file_read, file_wr
                    copy_file, copy_folder, copy_glob_files, file_rename, files_replace,
                    copy_awtk_files, copy_app_sources, copy_app_assets, update_cmake_file,
                    config_get_app_full_name, config_get_app_name, config_get_sources,
-                   config_get_includes, merge_and_check_config, config_get_plugins,
+                   config_get_includes, load_config, config_get_plugins,
                    copy_folder_overwrite
                    )
 
@@ -200,6 +200,5 @@ if len(sys.argv) < 2:
 else:
     app_json = os.path.abspath(sys.argv[1])
 
-with open(app_json, 'r') as load_f:
-    config = merge_and_check_config(json.load(load_f), 'android')
-    create_project(config, os.path.dirname(app_json))
+config = load_config(app_json, 'android')
+create_project(config, os.path.dirname(app_json))
