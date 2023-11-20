@@ -85,6 +85,7 @@ file(GLOB SOURCE_FILES
 	${AWTK_SOURCE_DIR}/src/streams/mem/*.c
 	${AWTK_SOURCE_DIR}/src/streams/file/*.c
 	${AWTK_SOURCE_DIR}/src/streams/inet/*.c
+	${AWTK_SOURCE_DIR}/src/streams/*.c
 	${AWTK_SOURCE_DIR}/src/csv/*.c
 	${AWTK_SOURCE_DIR}/src/conf_io/*.c
 	${AWTK_SOURCE_DIR}/src/fscript_ext/*.c
