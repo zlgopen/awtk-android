@@ -49,6 +49,7 @@ file(GLOB SOURCE_FILES
 	${SDL2_SOURCE_DIR}/src/video/android/*.c
 	${SDL2_SOURCE_DIR}/src/video/yuv2rgb/*.c
 	${AWTK_SOURCE_DIR}/3rd/libunibreak/*.c
+	${AWTK_SOURCE_DIR}/3rd/miniz/*.c
 	${AWTK_SOURCE_DIR}/3rd/gpinyin/src/*.cpp
 	${AWTK_SOURCE_DIR}/3rd/nanovg/base/*.c
 	${AWTK_SOURCE_DIR}/src/tkc/*.c
