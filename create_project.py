@@ -1,30 +1,24 @@
 import os
 import sys
-import glob
 import json
-import shutil
 
-from utils import (join_path, show_usage, mkdir_if_not_exist, file_read, file_write, file_replace,
-                   copy_file, copy_folder, copy_glob_files, file_rename, files_replace,
-                   copy_awtk_files, copy_app_sources, copy_app_assets, update_cmake_file,
-                   config_get_app_full_name, config_get_app_name, config_get_sources,
-                   config_get_includes, load_config, config_get_plugins,
-                   copy_folder_overwrite
-                   )
+AWTK_ROOT = os.path.normpath(os.path.abspath(os.path.join(os.getcwd(), "../awtk")))
+sys.path.append(os.path.join(AWTK_ROOT, "scripts"))
 
+import mobile_project_helper as helper
 
 ANDROID_HOME = os.environ.get('ANDROID_HOME')
 ANDROID_NDK_HOME = os.environ.get('ANDROID_NDK_HOME')
-AWTK_ANDROID_DIR = os.path.abspath(os.path.normpath(os.getcwd()))
-BUILD_DIR = join_path(AWTK_ANDROID_DIR, 'build')
-TEMPLATE_DIR = join_path(AWTK_ANDROID_DIR, 'android-project')
-PLUGINS_DIR = join_path(os.getcwd(), '../awtk-mobile-plugins')
+WORK_DIR = os.path.abspath(os.path.normpath(os.getcwd()))
+BUILD_DIR = helper.join_path(WORK_DIR, 'build')
+TEMPLATE_DIR = helper.join_path(WORK_DIR, 'android-project')
+PLUGINS_DIR = helper.join_path(os.getcwd(), '../awtk-mobile-plugins')
 
 if ANDROID_HOME == None or ANDROID_NDK_HOME == None:
     print('ANDROID_HOME or ANDROID_NDK_HOME is not set!')
     sys.exit(0)
 
-print('AWTK_ANDROID_DIR:' + AWTK_ANDROID_DIR)
+print('WORK_DIR:' + WORK_DIR)
 
 def is_fullscreen(config):
     if 'features' in config and 'fullscreen' in config['features']:
@@ -35,15 +29,15 @@ def apply_features(config, app_root_dst):
     if is_fullscreen(config):
         activityPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar.Fullscreen"'
         appPreferTheme = 'android:theme="@android:style/Theme.NoTitleBar"'
-        filename = join_path(app_root_dst, 'app/src/main/java/org/libsdl/app/SDLActivity.java')
-        file_replace(filename, '//setWindowStyle(false);', "setWindowStyle(true);");
+        filename = helper.join_path(app_root_dst, 'app/src/main/java/org/libsdl/app/SDLActivity.java')
+        helper.file_replace(filename, '//setWindowStyle(false);', "setWindowStyle(true);");
     else:
         activityPreferTheme = 'android:theme="@style/AppTheme"'
         appPreferTheme = ''
 
-    filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
-    file_replace(filename, 'APP_PREFER_THEME', appPreferTheme);
-    file_replace(filename, 'ACTIVITY_PREFER_THEME', activityPreferTheme);
+    filename = helper.join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
+    helper.file_replace(filename, 'APP_PREFER_THEME', appPreferTheme);
+    helper.file_replace(filename, 'ACTIVITY_PREFER_THEME', activityPreferTheme);
 
 def apply_plugins_config(config, app_root_dst):
     nameClassPairs = []
@@ -51,10 +45,10 @@ def apply_plugins_config(config, app_root_dst):
     permissions = []
     dependencies = []
 
-    plugins = config_get_plugins(config)
+    plugins = helper.config_get_plugins(config)
 
     for p in plugins:
-        plugin_json = join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
+        plugin_json = helper.join_path(PLUGINS_DIR, 'src/' + p + '/plugin.json');
 
         with open(plugin_json, 'r') as f:
             plugin_config = json.load(f);
@@ -81,12 +75,12 @@ def apply_plugins_config(config, app_root_dst):
     permissions = '\n    '.join(permissions);
     dependencies = '\n    '.join(dependencies);
 
-    filename = join_path(app_root_dst, 'app/build.gradle')
-    file_replace(filename, 'EXTRA_DEPENDENCIES', dependencies);
+    filename = helper.join_path(app_root_dst, 'app/build.gradle')
+    helper.file_replace(filename, 'EXTRA_DEPENDENCIES', dependencies);
     
-    filename = join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
-    file_replace(filename, 'EXTRA_ACTIVITIES', activities);
-    file_replace(filename, 'EXTRA_PERMISSION', permissions);
+    filename = helper.join_path(app_root_dst, 'app/src/main/AndroidManifest.xml')
+    helper.file_replace(filename, 'EXTRA_ACTIVITIES', activities);
+    helper.file_replace(filename, 'EXTRA_PERMISSION', permissions);
 
     imports = ''
     registers = ''
@@ -96,68 +90,68 @@ def apply_plugins_config(config, app_root_dst):
         registers += 'PluginManager.register(\"'
         registers += name.lower()+'\", new '+className+'(PluginManager.activity, id++));\n';
 
-    filename = join_path(app_root_dst, 'app/src/main/java/org/zlgopen/plugins/common/PluginManager.java')
-    file_replace(filename, 'EXTRA_IMPORTS', imports);
-    file_replace(filename, 'EXTRA_REGISTERS', registers);
+    filename = helper.join_path(app_root_dst, 'app/src/main/java/org/zlgopen/plugins/common/PluginManager.java')
+    helper.file_replace(filename, 'EXTRA_IMPORTS', imports);
+    helper.file_replace(filename, 'EXTRA_REGISTERS', registers);
 
 def copy_plugins(config, app_root_dst):
-    plugins = config_get_plugins(config)
+    plugins = helper.config_get_plugins(config)
    
-    sfrom = join_path(PLUGINS_DIR, "src/common/*.*");
-    sfrom_dir = join_path(PLUGINS_DIR, "src");
-    sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
-    copy_glob_files(sfrom, sfrom_dir, sto);
+    sfrom = helper.join_path(PLUGINS_DIR, "src/common/*.*");
+    sfrom_dir = helper.join_path(PLUGINS_DIR, "src");
+    sto = helper.join_path(app_root_dst, "app/src/main/cpp/plugins");
+    helper.copy_glob_files(sfrom, sfrom_dir, sto);
     
-    sfrom = join_path(PLUGINS_DIR, "src/common/android/java");
-    sto = join_path(app_root_dst, "app/src/main/java");
-    copy_folder_overwrite(sfrom, sto);
+    sfrom = helper.join_path(PLUGINS_DIR, "src/common/android/java");
+    sto = helper.join_path(app_root_dst, "app/src/main/java");
+    helper.copy_folder_overwrite(sfrom, sto);
    
     for p in plugins:
-        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/*.*");
-        sfrom_dir = join_path(PLUGINS_DIR, "src");
-        sto = join_path(app_root_dst, "app/src/main/cpp/plugins");
-        copy_glob_files(sfrom, sfrom_dir, sto);
+        sfrom = helper.join_path(PLUGINS_DIR, "src/"+p+"/*.*");
+        sfrom_dir = helper.join_path(PLUGINS_DIR, "src");
+        sto = helper.join_path(app_root_dst, "app/src/main/cpp/plugins");
+        helper.copy_glob_files(sfrom, sfrom_dir, sto);
     
-        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/android/java");
-        sto = join_path(app_root_dst, "app/src/main/java");
-        copy_folder_overwrite(sfrom, sto);
+        sfrom = helper.join_path(PLUGINS_DIR, "src/"+p+"/android/java");
+        sto = helper.join_path(app_root_dst, "app/src/main/java");
+        helper.copy_folder_overwrite(sfrom, sto);
 
-        sfrom = join_path(PLUGINS_DIR, "src/"+p+"/android/aidl");
-        sto = join_path(app_root_dst, "app/src/main/aidl");
+        sfrom = helper.join_path(PLUGINS_DIR, "src/"+p+"/android/aidl");
+        sto = helper.join_path(app_root_dst, "app/src/main/aidl");
         if os.path.exists(sfrom):
-          copy_folder_overwrite(sfrom, sto);
+          helper.copy_folder_overwrite(sfrom, sto);
 
 
-def rename_files_content(app_root_dst, app_full_name, app_name):
+def replace_files_content(app_root_dst, config):
     files = [
         'app/build.gradle',
         'app/src/main/AndroidManifest.xml',
         'app/src/main/res/values/strings.xml',
         'app/src/main/java/org/zlgopen/awtktemplate/MainActivity.java',
     ]
-    files_replace(files, app_root_dst, app_full_name, app_name)
+    helper.files_replace_with_config(files, app_root_dst, config)
 
 
 def rename_folders_and_files(app_root_dst, app_full_name):
     items = app_full_name.split('.')
-    src = join_path(app_root_dst, 'app/src/main/java/org/zlgopen/awtktemplate')
-    dst = join_path(app_root_dst, 'app/src/main/java/org/zlgopen/' + items[2])
-    file_rename(src, dst)
+    src = helper.join_path(app_root_dst, 'app/src/main/java/org/zlgopen/awtktemplate')
+    dst = helper.join_path(app_root_dst, 'app/src/main/java/org/zlgopen/' + items[2])
+    helper.file_rename(src, dst)
 
-    src = join_path(app_root_dst, 'app/src/main/java/org/zlgopen')
-    dst = join_path(app_root_dst, 'app/src/main/java/org/' + items[1])
-    file_rename(src, dst)
+    src = helper.join_path(app_root_dst, 'app/src/main/java/org/zlgopen')
+    dst = helper.join_path(app_root_dst, 'app/src/main/java/org/' + items[1])
+    helper.file_rename(src, dst)
 
-    src = join_path(app_root_dst, 'app/src/main/java/org')
-    dst = join_path(app_root_dst, 'app/src/main/java/' + items[0])
-    file_rename(src, dst)
+    src = helper.join_path(app_root_dst, 'app/src/main/java/org')
+    dst = helper.join_path(app_root_dst, 'app/src/main/java/' + items[0])
+    helper.file_rename(src, dst)
 
 
 def update_local_props(app_root_dst):
-    filename = join_path(app_root_dst, 'local.properties')
+    filename = helper.join_path(app_root_dst, 'local.properties')
     content = 'sdk.dir=' + ANDROID_HOME + '\n'
     content += 'ndk.dir=' + ANDROID_NDK_HOME + '\n'
-    file_write(filename, content)
+    helper.file_write(filename, content)
 
 
 def show_result(app_name):
@@ -172,20 +166,20 @@ def show_result(app_name):
 
 
 def create_project(config, app_root_src):
-    app_name = config_get_app_name(config)
-    app_full_name = config_get_app_full_name(config)
-    app_root_dst = join_path(BUILD_DIR, app_name)
+    app_name = helper.config_get_app_name(config)
+    app_full_name = helper.config_get_app_full_name(config)
+    app_root_dst = helper.join_path(BUILD_DIR, app_name)
 
-    copy_folder(TEMPLATE_DIR, app_root_dst)
-    rename_files_content(app_root_dst, app_full_name, app_name)
+    helper.copy_folder(TEMPLATE_DIR, app_root_dst)
+    replace_files_content(app_root_dst, config)
     rename_folders_and_files(app_root_dst, app_full_name)
     update_local_props(app_root_dst)
-    copy_awtk_files(join_path(app_root_dst, 'app/src/main/cpp/awtk'))
-    copy_app_sources(config, join_path(
+    helper.copy_awtk_files(helper.join_path(app_root_dst, 'app/src/main/cpp/awtk'))
+    helper.copy_app_sources(config, helper.join_path(
         app_root_dst, 'app/src/main/cpp/app'), app_root_src)
-    copy_app_assets(config, join_path(
+    helper.copy_app_assets(config, helper.join_path(
         app_root_dst, 'app/src/main/assets/assets'), app_root_src)
-    update_cmake_file(config, join_path(
+    helper.update_cmake_file(config, helper.join_path(
         app_root_dst, "app/src/main/cpp/CMakeLists.txt"))
 
     copy_plugins(config, app_root_dst);
@@ -196,9 +190,9 @@ def create_project(config, app_root_src):
 
 app_json = ''
 if len(sys.argv) < 2:
-    show_usage()
+    helper.show_usage()
 else:
     app_json = os.path.abspath(sys.argv[1])
 
-config = load_config(app_json, 'android')
+config = helper.load_config(app_json, 'android')
 create_project(config, os.path.dirname(app_json))
