@@ -175,6 +175,7 @@ def create_project(config, app_root_src):
     rename_folders_and_files(app_root_dst, app_full_name)
     update_local_props(app_root_dst)
     helper.copy_awtk_files(helper.join_path(app_root_dst, 'app/src/main/cpp/awtk'))
+    helper.copy_file(helper.join_path(AWTK_ROOT, "scripts/awtk_mobile_common.mk"), helper.join_path(app_root_dst, "app/src/main/cpp/awtk_common.mk"))
     helper.copy_app_sources(config, helper.join_path(
         app_root_dst, 'app/src/main/cpp/app'), app_root_src)
     helper.copy_app_assets(config, helper.join_path(
