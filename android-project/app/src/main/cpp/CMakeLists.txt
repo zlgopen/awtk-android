@@ -5,55 +5,32 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+project(awtk_napi)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-set(APP_SOURCE_DIR "app")
 set(PLUGINS_SOURCE_DIR "plugins")
-set(AWTK_SOURCE_DIR "awtk")
 set(SDL2_SOURCE_DIR "awtk/3rd/SDL")
 
 include(awtk_common.mk)
-
+	
 file(GLOB SOURCE_FILES
   ${SDL2_SOURCE_DIR}/src/hidapi/android/hid.cpp 
-	${SDL2_SOURCE_DIR}/src/*.c
-	${SDL2_SOURCE_DIR}/src/audio/*.c
 	${SDL2_SOURCE_DIR}/src/audio/android/*.c
-	${SDL2_SOURCE_DIR}/src/audio/dummy/*.c
-	${SDL2_SOURCE_DIR}/src/atomic/*.c
 	${SDL2_SOURCE_DIR}/src/core/android/*.c
-	${SDL2_SOURCE_DIR}/src/cpuinfo/*.c
-	${SDL2_SOURCE_DIR}/src/dynapi/*.c
-	${SDL2_SOURCE_DIR}/src/events/*.c
-	${SDL2_SOURCE_DIR}/src/file/*.c
-	${SDL2_SOURCE_DIR}/src/haptic/*.c
 	${SDL2_SOURCE_DIR}/src/haptic/android/*.c
-	${SDL2_SOURCE_DIR}/src/joystick/*.c
 	${SDL2_SOURCE_DIR}/src/joystick/android/*.c
-	${SDL2_SOURCE_DIR}/src/joystick/hidapi/*.c
-	${SDL2_SOURCE_DIR}/src/loadso/dlopen/*.c
-	${SDL2_SOURCE_DIR}/src/power/*.c
 	${SDL2_SOURCE_DIR}/src/power/android/*.c
 	${SDL2_SOURCE_DIR}/src/filesystem/android/*.c
-	${SDL2_SOURCE_DIR}/src/sensor/*.c
 	${SDL2_SOURCE_DIR}/src/sensor/android/*.c
-	${SDL2_SOURCE_DIR}/src/render/*.c
-	${SDL2_SOURCE_DIR}/src/render/*/*.c
-	${SDL2_SOURCE_DIR}/src/stdlib/*.c
-	${SDL2_SOURCE_DIR}/src/thread/*.c
-	${SDL2_SOURCE_DIR}/src/thread/pthread/*.c
-	${SDL2_SOURCE_DIR}/src/timer/*.c
-	${SDL2_SOURCE_DIR}/src/timer/unix/*.c
-	${SDL2_SOURCE_DIR}/src/video/*.c
 	${SDL2_SOURCE_DIR}/src/video/android/*.c
-	${SDL2_SOURCE_DIR}/src/video/yuv2rgb/*.c
-	${AWTK_SOURCE_DIR}/src/input_methods/input_method_creator.c
-	${AWTK_SOURCE_DIR}/src/main_loop/main_loop_sdl.c
-	${AWTK_SOURCE_DIR}/src/native_window/native_window_sdl.c
 	${AWTK_COMMON_SOURCE_FILES}
+	${AWTK_SDL_COMMON_SOURCE_FILES}
+  ${PLUGINS_SOURCE_DIR}/**/*.c
+  ${PLUGINS_SOURCE_DIR}/**/*.cpp
 )
 
 include_directories(${SDL2_SOURCE_DIR}/include
@@ -94,17 +71,6 @@ add_library(hidapi SHARED ${SOURCE_FILES})
 target_link_libraries(hidapi ${ANDROID_LIBS})
 
 #application
-file(GLOB_RECURSE APP_SOURCE_FILES  
-  ${PLUGINS_SOURCE_DIR}/**/*.c
-  ${PLUGINS_SOURCE_DIR}/**/*.cpp
-  ${APP_SOURCE_DIR}/*.c
-  ${APP_SOURCE_DIR}/*.cpp
-  ${APP_SOURCE_DIR}/**/*.c
-  ${APP_SOURCE_DIR}/**/*.cpp
-  ${APP_SOURCE_DIR}/**/**/*.c
-  ${APP_SOURCE_DIR}/**/**/*.cpp
-  )
-
-add_library(app SHARED ${APP_SOURCE_FILES})
+add_library(app SHARED ${AWTK_APP_SOURCE_FILES})
 target_link_libraries(app ${ANDROID_LIBS} awtk)
 
