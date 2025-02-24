@@ -2,7 +2,7 @@
 
 awtk android 移植
 
-> [预编译的demoui APK](http://zlgawtk.bceapp.com/awtk/demos/demoui.apk)
+> [预编译的demoui APK](apk/demoui.apk)
 
 ## 安装 android 开发环境
 
